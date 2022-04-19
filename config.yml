@@ -35,6 +35,12 @@ self_type_define: # 自定义数据类型映射
 out_file_name: "" # 自定义生成文件名
 web_tag_type: 0 # json tag类型 0: 小驼峰 1: 下划线
 
+custom_tag:
+    -   column_name: Created 
+        column_tag: autoCreateTime
+    -   column_name: Updated 
+        column_tag: autoUpdateTime
+
 # sqlite
 # db_info:
 #     host : /Users/xxj/Downloads/caoguo # type=1的时候，host为yml文件全路径

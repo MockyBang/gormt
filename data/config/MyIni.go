@@ -15,7 +15,7 @@ type Config struct {
 	URLTag               string            `yaml:"url_tag"`         // url tag
 	Language             string            `yaml:"language"`        // language
 	DbTag                string            `yaml:"db_tag"`          // 数据库标签（gormt,db）
-	UserGormModel        bool              `yaml:"user_gorm_model"` //model是否使用gorm.Model
+	UserGormModel        bool              `yaml:"user_gorm_model"` // model是否使用gorm.Model
 	Simple               bool              `yaml:"simple"`
 	IsWEBTag             bool              `yaml:"is_web_tag"`
 	IsWebTagPkHidden     bool              `yaml:"is_web_tag_pk_hidden"` // web标记是否隐藏主键
@@ -31,9 +31,15 @@ type Config struct {
 	OutFileName          string            `yaml:"out_file_name"`
 	WebTagType           int               `yaml:"web_tag_type"`              // 默认小驼峰
 	TableNames           string            `yaml:"table_names"`               // 表名（多个表名用","隔开）
-	IsColumnName         bool              `yaml:"is_column_name"`            //是否输出列名
-	IsOutFileByTableName bool              `yaml:"is_out_file_by_table_name"` //是否根据表名生成文件(多个表名生成多个文件)
+	IsColumnName         bool              `yaml:"is_column_name"`            // 是否输出列名
+	IsOutFileByTableName bool              `yaml:"is_out_file_by_table_name"` // 是否根据表名生成文件(多个表名生成多个文件)
 	IsOutPage            bool              `yaml:"is_out_page"`               // 是否输出分页支持
+	CustomTag            []CustomTag       `yaml:"custom_tag"`                // 自定义列名tag支持
+}
+
+type CustomTag struct {
+	ColumnName string `yaml:"column_name"`
+	ColumnTag  string `yaml:"column_tag"`
 }
 
 // DBInfo mysql database information. mysql 数据库信息
@@ -54,6 +60,11 @@ func SetMysqlDbInfo(info *DBInfo) {
 // GetDbInfo Get configuration information .获取数据配置信息
 func GetDbInfo() DBInfo {
 	return _map.DBInfo
+}
+
+// GetCustomTag Get custom tag information .获取自定义的列名Tag
+func GetCustomTag() []CustomTag {
+	return _map.CustomTag
 }
 
 // GetMysqlConStr Get MySQL connection string.获取mysql 连接字符串
@@ -275,7 +286,7 @@ func GetWebTagType() int {
 	return _map.WebTagType
 }
 
-//GetTableNames get format tableNames by config. 获取格式化后设置的表名
+// GetTableNames get format tableNames by config. 获取格式化后设置的表名
 func GetTableNames() string {
 	var sb strings.Builder
 	if _map.TableNames != "" {
@@ -302,27 +313,27 @@ func GetTableNames() string {
 	return sb.String()
 }
 
-//GetOriginTableNames get origin tableNames. 获取原始的设置的表名
+// GetOriginTableNames get origin tableNames. 获取原始的设置的表名
 func GetOriginTableNames() string {
 	return _map.TableNames
 }
 
-//SetTableNames set tableNames. 设置生成的表名
+// SetTableNames set tableNames. 设置生成的表名
 func SetTableNames(tableNames string) {
 	_map.TableNames = tableNames
 }
 
-//GetIsColumnName get  gen columnName config . 获取生成列名的config
+// GetIsColumnName get  gen columnName config . 获取生成列名的config
 func GetIsColumnName() bool {
 	return _map.IsColumnName
 }
 
-//SetIsColumnName set gen ColumnName config. 设置生成列名的config
+// SetIsColumnName set gen ColumnName config. 设置生成列名的config
 func SetIsColumnName(isColumnName bool) {
 	_map.IsColumnName = isColumnName
 }
 
-//GetIsOutFileByTableName get  gen columnName config . 设置是否根据表名生成文件
+// GetIsOutFileByTableName get  gen columnName config . 设置是否根据表名生成文件
 func GetIsOutFileByTableName() bool {
 	return _map.IsOutFileByTableName
 }

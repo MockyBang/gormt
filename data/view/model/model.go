@@ -72,7 +72,7 @@ func getTableNameWithPrefix(tableName string) string {
 func (m *_Model) GetPackage() genstruct.GenPackage {
 	if m.pkg == nil {
 		var pkg genstruct.GenPackage
-		pkg.SetPackage(m.info.PackageName) //package name
+		pkg.SetPackage(m.info.PackageName) // package name
 
 		for _, tab := range m.info.TabList {
 			var sct genstruct.GenStruct
@@ -98,7 +98,7 @@ func (m *_Model) GenerateByTableName() (out []GenOutInfo) {
 	if m.pkg == nil {
 		for _, tab := range m.info.TabList {
 			var pkg genstruct.GenPackage
-			pkg.SetPackage(m.info.PackageName) //package name
+			pkg.SetPackage(m.info.PackageName) // package name
 			var sct genstruct.GenStruct
 			sct.SetTableName(tab.Name)
 			tab.Name = getTableNameWithPrefix(tab.Name)
@@ -191,6 +191,15 @@ func (m *_Model) genTableElement(cols []ColumnsInfo) (el []genstruct.GenElement)
 					// default tag
 					if len(v.Gormt) > 0 {
 						tmp.AddTag(_tagGorm, v.Gormt)
+					}
+					// 自定义 Created 和 Updated tag
+					if len(config.GetCustomTag()) > 0 {
+						customTag := config.GetCustomTag()
+						for _, tag := range customTag {
+							if getCamelName(v.Name) == tag.ColumnName {
+								tmp.AddTag(_tagGorm, tag.ColumnTag)
+							}
+						}
 					}
 				} else {
 					tmp.AddTag(_tagGorm, "column:"+v.Name)
@@ -324,7 +333,7 @@ func (m *_Model) generateFunc() (genOut []GenOutInfo) {
 		FileName: "gen.base.go",
 		FileCtx:  buf.String(),
 	})
-	//tools.WriteFile(outDir+"gen_router.go", []string{buf.String()}, true)
+	// tools.WriteFile(outDir+"gen_router.go", []string{buf.String()}, true)
 	// -------end------
 
 	// gen page 分页查询的基础
@@ -345,7 +354,7 @@ func (m *_Model) generateFunc() (genOut []GenOutInfo) {
 
 	for _, tab := range m.info.TabList {
 		var pkg genstruct.GenPackage
-		pkg.SetPackage(m.info.PackageName) //package name
+		pkg.SetPackage(m.info.PackageName) // package name
 		pkg.AddImport(`"fmt"`)
 		pkg.AddImport(`"context"`) // 添加import信息
 		pkg.AddImport(cnf.EImportsHead["gorm.Model"])

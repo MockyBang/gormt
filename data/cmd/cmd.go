@@ -68,9 +68,8 @@ func init() {
 	rootCmd.Flags().Int("port", 3306, "端口号")
 
 	rootCmd.Flags().StringP("table_prefix", "t", "", "表前缀")
-	//add table name. 增加表名称
+	// add table name. 增加表名称
 	rootCmd.Flags().StringP("table_names", "b", "", "表名称")
-
 }
 
 // initConfig reads in config file and ENV variables if set.
@@ -85,12 +84,13 @@ func initConfig() {
 	} else {
 		mylog.Info("using database info:")
 		mylog.JSON(config.GetDbInfo())
+		mylog.Infof("tag: %v", config.GetCustomTag())
 	}
 }
 
 // MergeMysqlDbInfo merge parm
 func MergeMysqlDbInfo() {
-	var tmp = config.GetDbInfo()
+	tmp := config.GetDbInfo()
 	mycobra.IfReplace(rootCmd, "database", &tmp.Database) // 如果设置了，更新
 	mycobra.IfReplace(rootCmd, "host", &tmp.Host)         // 如果设置了，更新
 	mycobra.IfReplace(rootCmd, "password", &tmp.Password) // 如果设置了，更新
@@ -122,12 +122,11 @@ func MergeMysqlDbInfo() {
 	mycobra.IfReplace(rootCmd, "table_prefix", &tablePrefix) // 如果设置了，更新
 	config.SetTablePrefix(tablePrefix)
 
-	//update tableNames. 更新tableNames
+	// update tableNames. 更新tableNames
 	tableNames := config.GetTableNames()
 	if tableNames != "" {
 		tableNames = strings.Replace(tableNames, "'", "", -1)
 	}
 	mycobra.IfReplace(rootCmd, "table_names", &tableNames) // 如果设置了，更新
 	config.SetTableNames(tableNames)
-
 }
