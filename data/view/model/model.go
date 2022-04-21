@@ -9,6 +9,7 @@ import (
 	"github.com/xxjwxc/gormt/data/view/cnf"
 
 	"github.com/xxjwxc/public/mybigcamel"
+	"github.com/xxjwxc/public/mylog"
 
 	"github.com/xxjwxc/gormt/data/config"
 	"github.com/xxjwxc/gormt/data/view/genfunc"
@@ -249,8 +250,13 @@ func (m *_Model) genForeignKey(col ColumnsInfo) (fklist []genstruct.GenElement) 
 				tmp.SetName(getCamelName(v.TableName) + "List")
 				tmp.SetType("[]" + getCamelName(v.TableName))
 			} else {
+				mylog.Infof("tablename : %v %v", v.TableName, col.Name)
 				tmp.SetName(getCamelName(v.TableName))
-				tmp.SetType(getCamelName(v.TableName))
+				if col.Name == "parent_id" {
+					tmp.SetType("*" + getCamelName(v.TableName))
+				} else {
+					tmp.SetType(getCamelName(v.TableName))
+				}
 			}
 
 			tmp.AddTag(_tagGorm, "joinForeignKey:"+col.Name) // association_foreignkey
